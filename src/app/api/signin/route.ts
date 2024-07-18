@@ -1,11 +1,12 @@
-import validateEmail from "@/app/helpers/validateEmail";
-import validatePassword from "@/app/helpers/validatePassword";
-import prisma from "@/app/lib/prisma";
+import validateEmail from "../../helpers/validateEmail";
+import validatePassword from "../../helpers/validatePassword";
+import prisma from "../../lib/prisma";
 import bcrypt from "bcryptjs";
 import * as jose from "jose";
 
 export async function POST(request: Request) {
-  // Read data off req body
+
+  // Extract data sent in
   const body = await request.json();
   const { email, password } = body;
 
@@ -13,25 +14,27 @@ export async function POST(request: Request) {
   if (!validateEmail(email) || !validatePassword(password)) {
     return Response.json(
       {
-        error: "Invalid email or password",
+        error: "Invalid email or password"
       },
-      { status: 400 }
+      {
+        status: 400
+      }
     );
   }
-
   // Lookup the user
   const user = await prisma.user.findFirst({
     where: {
       email,
-    },
+    }
   });
-
   if (!user) {
     return Response.json(
       {
-        error: "Invalid email or password",
+        error: "Invalid user"
       },
-      { status: 400 }
+      {
+        status: 400
+      }
     );
   }
 
@@ -41,7 +44,7 @@ export async function POST(request: Request) {
   if (!isCorrectPassword) {
     return Response.json(
       {
-        error: "Invalid email or password",
+        error: "Invalid password",
       },
       { status: 400 }
     );
@@ -57,6 +60,7 @@ export async function POST(request: Request) {
     .setSubject(user.id.toString())
     .sign(secret);
 
+  
   // Respond with it
   return Response.json({ token: jwt });
 }

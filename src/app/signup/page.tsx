@@ -1,13 +1,20 @@
+"use client";
+
+import { useFormState } from "react-dom";
+import signupAction from "./signupAction";
+
 export default function Signup() {
-    return (
-      <main>
-        <h1>Signup</h1>
-        <form>
-            <input type="email"></input>
-            <input type="password"></input>
-            <button type="submit">Sign Up</button>
-        </form>
-      </main>
-    );
-  }
-  
+  const [error, formAction] = useFormState(signupAction, undefined);
+
+  return (
+    <div>
+      <h1>Signup</h1>
+      <form action={formAction}>
+        <input type="email" name="email" />
+        <input type="password" name="password" />
+        <button type="submit">Signup</button>
+      </form>
+      {error && <p>{error}</p>}
+    </div>
+  );
+}
