@@ -23,9 +23,8 @@ export async function POST(request: Request) {
   }
   // Lookup the user
   const user = await prisma.user.findFirst({
-    where: {
-      email,
-    }
+    where: { email },
+    select: { id: true, email: true, password: true, role: true },
   });
   if (!user) {
     return Response.json(
@@ -50,6 +49,9 @@ export async function POST(request: Request) {
     );
   }
 
+  // Determine redirect target based on user role
+  const redirectTarget = user.role === 'user' ? '/protected' : '/admin';
+
   // Create jwt token
   const secret = new TextEncoder().encode(process.env.JWT_SECRET);
   const alg = "HS256";
@@ -62,5 +64,5 @@ export async function POST(request: Request) {
 
   
   // Respond with it
-  return Response.json({ token: jwt });
+  return Response.json({ token: jwt, redirect: redirectTarget});
 }
