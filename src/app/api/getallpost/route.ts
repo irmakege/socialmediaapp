@@ -16,7 +16,9 @@ export async function POST(request: Request)
       userId: userId,
     },
     select: {
+      id: true,
       postDetails: true,
+      createdAt: true,
     }
   });
 
