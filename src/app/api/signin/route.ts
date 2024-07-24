@@ -50,7 +50,7 @@ export async function POST(request: Request) {
   }
 
   // Determine redirect target based on user role
-  const redirectTarget = user.role === 'user' ? '/protected' : '/admin';
+  const redirectTarget = user.role === 'user' ? `/home/${user.id}` : '/admin';
 
   // Create jwt token
   const secret = new TextEncoder().encode(process.env.JWT_SECRET);

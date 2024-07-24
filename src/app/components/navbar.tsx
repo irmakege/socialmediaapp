@@ -10,7 +10,7 @@ export default function Navbar() {
       <ul>
         {isLoggedIn ? (
           <li>
-            <Link href="/dashboard">Dashboard</Link>
+            <Link href="/protected">Dashboard</Link>
           </li>
         ) : (
           <>

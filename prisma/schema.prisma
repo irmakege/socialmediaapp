@@ -20,3 +20,11 @@ model User {
   role String @default("user")
 }
 
+model Post {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  postDetails String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
